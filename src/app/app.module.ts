@@ -4,6 +4,7 @@ import {AppComponent} from "./app.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {InvoiceListComponent} from "../invoice/invoice-list/invoice.list.component";
 import {ApiService} from "../services/api.service";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -12,7 +13,9 @@ import {ApiService} from "../services/api.service";
     ],
     imports: [
         BrowserModule,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        FormsModule,
+        ReactiveFormsModule
     ],
     providers: [
         {provide: ApiService, useClass: ApiService}

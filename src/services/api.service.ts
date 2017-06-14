@@ -1,10 +1,10 @@
 export class ApiService {
     getInvoices(): Array<Invoice> {
         let first: Invoice = new Invoice(1, "First milestone", "Mr. Freeman", 11.0, 1.0);
-        let second: Invoice = new Invoice(1, "Second milestone", "Mr. Freeman", 11.0, 1.0);
-        let third: Invoice = new Invoice(1, "Third milestone", "Mr. Freeman", 11.0, 1.0);
-        let fourth: Invoice = new Invoice(1, "Fourth milestone", "Mr. Freeman", 11.0, 1.0);
-        let fifth: Invoice = new Invoice(1, "Fifth milestone", "Mr. Freeman", 11.0, 1.0);
+        let second: Invoice = new Invoice(2, "Second milestone", "Mr. Freeman", 11.0, 1.0);
+        let third: Invoice = new Invoice(3, "Third milestone", "Mr. Freeman", 11.0, 1.0);
+        let fourth: Invoice = new Invoice(4, "Fourth milestone", "Mr. Freeman", 11.0, 1.0);
+        let fifth: Invoice = new Invoice(5, "Fifth milestone", "Mr. Freeman", 11.0, 1.0);
 
         let invoices: Array<Invoice> = [];
         invoices.push(first, second, third, fourth, fifth);
