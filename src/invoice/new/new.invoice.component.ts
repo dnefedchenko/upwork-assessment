@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Validators, FormGroup, FormBuilder, FormArray, FormControl} from "@angular/forms";
+import {Validators, FormGroup, FormBuilder, FormArray} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ApiService, Customer, Invoice, Product} from "../../services/api.service";
 
@@ -23,17 +23,29 @@ export class NewInvoiceComponent implements OnInit {
         this.newInvoice = new Invoice(1, new Array<Product>(), this.customers[0], 0.0, 0.0);
 
         this.invoiceForm = this.formBuilder.group({
-            'customer': [this.newInvoice.customer],
-            'products': new FormArray([
-                new FormControl()
-            ]),
-            'cost': [this.newInvoice.cost],
-            'discount': [this.newInvoice.discount]
+            customer: [this.newInvoice.customer],
+            products: this.formBuilder.array([this.initProduct()]),
+            cost: [this.newInvoice.cost],
+            discount: [this.newInvoice.discount]
+        });
+    }
+
+    initProduct(): FormGroup {
+        return this.formBuilder.group({
+            id: [''],
+            name: [{value: 'name goes here', disabled: true}, Validators.required],
+            quantity: ['1.0', Validators.required]
         });
     }
 
     addProduct(): void {
-        console.log(this.invoiceForm.value);
+        let products = <FormArray>this.invoiceForm.controls['products'];
+        products.push(this.initProduct());
+    }
+
+    removeProduct(index: number): void {
+        let products = <FormArray>this.invoiceForm.controls['products'];
+        products.removeAt(index);
     }
 
     saveInvoice(): void {

@@ -18,7 +18,7 @@
         <div class="form-group well" style="margin-top: 10px;">
             <h4>Products</h4>
 
-            <table class="table">
+            <table class="table" formArrayName="products">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -27,20 +27,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td>Red Hat</td>
-                        <td><input type="number" class="form-control qty-input" min="0"></td>
-                    </tr>
-                    <tr>
-                        <td><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></td>
-                        <td>Red Hat</td>
-                        <td><input type="number" class="form-control qty-input" min="0"></td>
-                    </tr>
-                    <tr>
-                        <td><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></td>
-                        <td>Red Hat</td>
-                        <td><input type="number" class="form-control qty-input" min="0"></td>
+                    <tr *ngFor="let product of invoiceForm.get('products').controls; let i = index;" [formGroupName]="i">
+                            <td>
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true" (click)="removeProduct(i)"></span>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" formControlName="name">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
+                            </td>
                     </tr>
                 </tbody>
             </table>
