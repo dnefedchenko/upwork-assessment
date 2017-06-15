@@ -13,15 +13,15 @@ import {Router} from "@angular/router";
                         <th>#</th>
                         <th>Title</th>
                         <th>Customer</th>
-                        <th>Cost</th>
                         <th>Discount</th>
+                        <th>Cost</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let invoice of invoices">
                         <td>{{invoice.id}}</td>
-                        <td>{{invoice.title}}</td>
-                        <td>{{invoice.customer}}</td>
+                        <td>{{invoice.customer.name}}</td>
+                        <td><span *ngFor="let product of invoice.products">{{product.name}}<br></span></td>
                         <td>{{invoice.cost}}</td>
                         <td>{{invoice.discount}}</td>
                     </tr>
