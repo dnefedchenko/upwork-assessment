@@ -5,15 +5,13 @@
         <div class="form-inline">
             <label for="customer">Customer:&nbsp;</label>
             <select id="customer" class="form-control" formControlName="customer">
-                <option>Kia</option>
-                <option>BMW</option>
-                <option>Skoda</option>
+                <option *ngFor="let customer of customers" [ngValue]="customer">{{customer.name}}</option>
             </select>
 
             <label for="discount">&nbsp;&nbsp;Discount(%):&nbsp;&nbsp;</label>
-            <input id="discount" type="number" class="form-control" min="0">
+            <input id="discount" type="number" class="form-control" min="0" formControlName="discount">
 
-            <label><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;28.75</strong></label>
+            <label><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;{{cost}}</strong></label>
         </div>
 
 

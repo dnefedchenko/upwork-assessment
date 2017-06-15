@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
-import {Validators, FormGroup, FormBuilder} from "@angular/forms";
+import {Validators, FormGroup, FormBuilder, FormArray, FormControl} from "@angular/forms";
 import {Router} from "@angular/router";
+import {ApiService, Customer, Invoice, Product} from "../../services/api.service";
 
 @Component({
     selector: 'invoice',
@@ -9,17 +10,25 @@ import {Router} from "@angular/router";
 })
 export class NewInvoiceComponent implements OnInit {
     invoiceForm: FormGroup;
+    newInvoice: Invoice;
 
-    constructor(private formBuilder: FormBuilder, private router: Router) {
+    customers: Array<Customer>;
+
+    constructor(private apiService: ApiService, private formBuilder: FormBuilder, private router: Router) {
 
     }
 
     ngOnInit(): void {
+        this.customers = this.apiService.getCustomers();
+        this.newInvoice = new Invoice(1, new Array<Product>(), this.customers[0], 0.0, 0.0);
+
         this.invoiceForm = this.formBuilder.group({
-            'title': ['e.g. some invoice', Validators.required],
-            'customer': ['e.g. test customer'],
-            'cost': ['e.g. 10.0'],
-            'discount': ['e.g. 1.0']
+            'customer': [this.newInvoice.customer],
+            'products': new FormArray([
+                new FormControl()
+            ]),
+            'cost': [this.newInvoice.cost],
+            'discount': [this.newInvoice.discount]
         });
     }
 
@@ -29,6 +38,8 @@ export class NewInvoiceComponent implements OnInit {
 
     saveInvoice(): void {
         console.log("Invoice saving goes here.");
+        this.apiService.createInvoice(this.invoiceForm.value);
+        this.newInvoice = new Invoice(1, new Array<Product>(), this.customers[0], 0.0, 0.0);
         this.router.navigateByUrl('invoices');
     }
 }
