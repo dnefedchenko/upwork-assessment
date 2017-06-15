@@ -1,0 +1,57 @@
+<div>
+    <h3>New Invoice</h3>
+
+    <form [formGroup]="invoiceForm" class="form-horizontal">
+        <div class="form-inline">
+            <label for="customer">Customer:&nbsp;</label>
+            <select id="customer" class="form-control" formControlName="customer">
+                <option>Kia</option>
+                <option>BMW</option>
+                <option>Skoda</option>
+            </select>
+
+            <label for="discount">&nbsp;&nbsp;Discount(%):&nbsp;&nbsp;</label>
+            <input id="discount" type="number" class="form-control" min="0">
+
+            <label><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;28.75</strong></label>
+        </div>
+
+
+        <div class="form-group well" style="margin-top: 10px;">
+            <h4>Products</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>Red Hat</td>
+                        <td><input type="number" class="form-control qty-input" min="0"></td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></td>
+                        <td>Red Hat</td>
+                        <td><input type="number" class="form-control qty-input" min="0"></td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></td>
+                        <td>Red Hat</td>
+                        <td><input type="number" class="form-control qty-input" min="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-default" (click)="addProduct()">Add Product</button>
+            <button type="button" class="btn btn-primary pull-right" (click)="saveInvoice()">Save Invoice</button>
+        </div>
+
+    </form>
+</div>
