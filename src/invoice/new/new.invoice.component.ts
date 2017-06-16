@@ -47,6 +47,8 @@ export class NewInvoiceComponent implements OnInit {
                     : this.allProducts.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
 
         this.productFormatter = (x: {name: string}) => x.name;
+
+        this.calculateTotalCost();
     }
 
     addProduct(event: NgbTypeaheadSelectItemEvent): void {
@@ -55,7 +57,7 @@ export class NewInvoiceComponent implements OnInit {
         let newProduct = this.formBuilder.group({
             name: [{value: event.item.name, disabled: true}, Validators.required],
             price: [{value: event.item.price, disabled: true}],
-            quantity: [{value: event.item.quantity}]
+            quantity: [{value: event.item.quantity, disabled: false}, Validators.required]
         });
 
         products.push(newProduct);
@@ -70,5 +72,9 @@ export class NewInvoiceComponent implements OnInit {
         this.apiService.createInvoice(this.invoiceForm.value);
         this.newInvoice = new Invoice(new Array<Product>(), this.customers[0], 0.0, 0.0);
         this.router.navigateByUrl('invoices');
+    }
+
+    calculateTotalCost(): void {
+
     }
 }

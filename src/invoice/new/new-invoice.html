@@ -15,7 +15,7 @@
             <label for="discount">&nbsp;&nbsp;Discount(%):&nbsp;&nbsp;</label>
             <input id="discount" type="number" class="form-control" min="0" formControlName="discount">
 
-            <label><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;{{cost}}</strong></label>
+            <label style="display: inline-block; float: right;"><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;{{newInvoice.total}}</strong></label>
         </div>
 
 
@@ -37,18 +37,18 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let product of invoiceForm.get('products').controls; let i = index;" [formGroupName]="i">
-                            <td>
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true" (click)="removeProduct(i)"></span>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" formControlName="name">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" formControlName="price">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
-                            </td>
+                        <td>
+                            <span class="glyphicons glyphicons-remove" (click)="removeProduct(i)"></span>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" formControlName="name">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" formControlName="price">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
+                        </td>
                     </tr>
                 </tbody>
             </table>

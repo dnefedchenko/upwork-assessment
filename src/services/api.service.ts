@@ -12,11 +12,11 @@ export class ApiService {
         let eaht: Customer = new Customer("EAHT");
         this.customers.push(alex, inna, masha, dmitriy, eaht);
 
-        let apple: Product = new Product('apple', 1.0, 0.0);
-        let cherry: Product = new Product('cherry', 2.0, 0.0);
-        let peach: Product = new Product('peach', 1.0, 0.0);
-        let pears: Product = new Product('pears', 3.0, 0.0);
-        let grape: Product = new Product('grape', 5.0, 0.0);
+        let apple: Product = new Product('apple', 1.0, 1.0);
+        let cherry: Product = new Product('cherry', 2.0, 1.0);
+        let peach: Product = new Product('peach', 1.0, 1.0);
+        let pears: Product = new Product('pears', 3.0, 1.0);
+        let grape: Product = new Product('grape', 5.0, 1.0);
         this.products.push(apple, cherry, peach, pears, grape);
 
         this.invoices.push(
