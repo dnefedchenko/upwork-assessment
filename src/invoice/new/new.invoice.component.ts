@@ -18,8 +18,9 @@ export class NewInvoiceComponent implements OnInit {
     newInvoice: Invoice;
 
     customers: Array<Customer>;
-    allProducts: string[] = ['Apples', 'Pears', 'Cherries', 'Grape', 'Bananas', 'Peaches', 'Watermelon'];
+    allProducts: Array<Product> = [];
     productSearch: any;
+    productFormatter: any;
 
     constructor(private apiService: ApiService, private formBuilder: FormBuilder, private router: Router) {
 
@@ -27,7 +28,7 @@ export class NewInvoiceComponent implements OnInit {
 
     ngOnInit(): void {
         this.customers = this.apiService.getCustomers();
-        // this.allProducts = this.apiService.getProducts();
+        this.allProducts = this.apiService.getProducts();
 
         this.newInvoice = new Invoice(new Array<Product>(), this.customers[0], 0.0, 0.0);
 
@@ -43,16 +44,18 @@ export class NewInvoiceComponent implements OnInit {
                 .debounceTime(200)
                 .distinctUntilChanged()
                 .map(term => term.length < 2 ? []
-                    : this.allProducts.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+                    : this.allProducts.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+
+        this.productFormatter = (x: {name: string}) => x.name;
     }
 
     addProduct(event: NgbTypeaheadSelectItemEvent): void {
         let products = <FormArray>this.invoiceForm.controls['products'];
 
         let newProduct = this.formBuilder.group({
-            name: [{value: event.item, disabled: true}, Validators.required],
-            price: [{value: '1.0', disabled: true}],
-            quantity: ['1']
+            name: [{value: event.item.name, disabled: true}, Validators.required],
+            price: [{value: event.item.price, disabled: true}],
+            quantity: [{value: event.item.quantity}]
         });
 
         products.push(newProduct);
@@ -64,7 +67,6 @@ export class NewInvoiceComponent implements OnInit {
     }
 
     saveInvoice(): void {
-        console.log("Invoice saving goes here.");
         this.apiService.createInvoice(this.invoiceForm.value);
         this.newInvoice = new Invoice(new Array<Product>(), this.customers[0], 0.0, 0.0);
         this.router.navigateByUrl('invoices');
