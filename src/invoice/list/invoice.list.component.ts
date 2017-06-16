@@ -10,19 +10,17 @@ import {Router} from "@angular/router";
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Title</th>
                         <th>Customer</th>
+                        <th>Products</th>
                         <th>Discount</th>
-                        <th>Cost</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let invoice of invoices">
-                        <td>{{invoice.id}}</td>
                         <td>{{invoice.customer.name}}</td>
                         <td><span *ngFor="let product of invoice.products">{{product.name}}<br></span></td>
-                        <td>{{invoice.cost}}</td>
+                        <td>{{invoice.total}}</td>
                         <td>{{invoice.discount}}</td>
                     </tr>
                 </tbody>

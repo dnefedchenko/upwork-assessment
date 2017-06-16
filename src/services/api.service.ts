@@ -2,22 +2,25 @@ export class ApiService {
     invoices: Array<Invoice> = [];
 
     customers: Array<Customer> = [];
+    products: Array<Product> = [];
 
     constructor() {
-        let alex: Customer = new Customer(1, "Alex");
-        let inna: Customer = new Customer(2, "Inna");
-        let masha: Customer = new Customer(3, "Masha");
-        let dmitriy: Customer = new Customer(4, "Dmitriy");
-        let eaht: Customer = new Customer(5, "EAHT");
+        let alex: Customer = new Customer("Alex");
+        let inna: Customer = new Customer("Inna");
+        let masha: Customer = new Customer("Masha");
+        let dmitriy: Customer = new Customer("Dmitriy");
+        let eaht: Customer = new Customer("EAHT");
         this.customers.push(alex, inna, masha, dmitriy, eaht);
 
-        let car: Product = new Product(1, "Kia Sportage");
-        let cycle: Product = new Product(1, "Comanche");
-        let products: Array<Product> = [];
-        products.push(car, cycle);
+        let apple: Product = new Product('apple', 1.0, 0);
+        let cherry: Product = new Product('cherry', 2.0, 0);
+        let peach: Product = new Product('peach', 1.0, 0);
+        let pears: Product = new Product('pears', 3.0, 0);
+        let grape: Product = new Product('grape', 5.0, 0);
+        this.products.push(apple, cherry, peach, pears, grape);
 
         this.invoices.push(
-            new Invoice(1, products, this.customers[0], 2.0, 24500.0));
+            new Invoice(this.products, this.customers[0], 0, 0));
     }
 
     getInvoices(): Array<Invoice> {
@@ -31,40 +34,42 @@ export class ApiService {
     getCustomers(): Array<Customer> {
         return this.customers;
     }
+
+    getProducts(): Array<Product> {
+        return this.products;
+    }
 }
 
 export class Invoice {
-    id: number;
     products: Array<Product>;
     customer: Customer;
     discount: number;
-    cost: number;
+    total: number;
 
-    constructor(id: number, products: Array<Product>, customer: Customer, discount: number, cost: number) {
-        this.id = id;
+    constructor(products: Array<Product>, customer: Customer, discount: number, total: number) {
         this.customer = customer;
         this.discount = discount;
-        this.cost = cost;
+        this.total = total;
         this.products = products;
     }
 }
 
 export class Product {
-    id: number;
     name: string;
+    price: number;
+    quantity: number;
 
-    constructor(id: number, name: string) {
-        this.id = id;
+    constructor(name: string, price: number, quantity: number) {
         this.name = name;
+        this.price = price;
+        this.quantity = quantity;
     }
 }
 
 export class Customer {
-    id: number;
     name: string;
 
-    constructor(id: number, name: string) {
-        this.id = id;
+    constructor(name: string) {
         this.name = name;
     }
 }
