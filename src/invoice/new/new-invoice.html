@@ -5,7 +5,14 @@
 <div>
     <h3>New Invoice</h3>
 
-    <form [formGroup]="invoiceForm" class="form-horizontal">
+    <form [formGroup]="invoiceForm" (ngSubmit)="saveInvoice(invoiceForm)" class="form-horizontal">
+        <div class="margin-20">
+            <div>Invoice Form Details details:-</div>
+            <pre>Is invoice form valid?: <br>{{invoiceForm.valid | json}}</pre>
+            <pre>Form value: <br>{{invoiceForm.value | json}}</pre>
+        </div>
+
+
         <div class="form-inline">
             <label for="customer">Customer:&nbsp;</label>
             <select id="customer" class="form-control" formControlName="customer">
@@ -18,44 +25,44 @@
             <label style="display: inline-block; float: right;"><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;{{newInvoice.total}}</strong></label>
         </div>
 
-
         <div class="form-group" style="margin-top: 10px;">
             <h4>Products</h4>
 
-            <input type="text" class="form-control" [ngbTypeahead]="productSearch"
+            <input type="text" class="form-control" [ngbTypeahead]="productSearch" placeholder="Enter product name..."
                    [inputFormatter]="productFormatter" [resultTemplate]="resultTemplate"
                    (selectItem)="addProduct($event)">
 
             <table class="table" formArrayName="products">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                    </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Price($)</th>
+                    <th>Quantity</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let product of invoiceForm.get('products').controls; let i = index;" [formGroupName]="i">
-                        <td>
-                            <span class="glyphicons glyphicons-remove" (click)="removeProduct(i)"></span>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" formControlName="name">
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" formControlName="price">
-                        </td>
-                        <td>
-                            <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
-                        </td>
-                    </tr>
+                <tr *ngFor="let product of invoiceForm.controls.products.controls; let i = index;" [formGroupName]="i">
+                    <td>
+                        <span *ngIf="invoiceForm.controls.products.controls.length > 1" class="glyphicons glyphicons-remove" (click)="removeProduct(i)"></span>
+                    </td>
+                    <td>
+                        <span>{{invoiceForm.controls.products.controls[i].controls.name.value}}</span>
+                    </td>
+                    <td>
+                        <span>{{invoiceForm.controls.products.controls[i].controls.price.value}}</span>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-primary pull-right" (click)="saveInvoice()">Save Invoice</button>
+            <button type="submit" class="btn btn-primary pull-right" [disabled]="!invoiceForm.valid">Save Invoice
+            </button>
         </div>
 
     </form>

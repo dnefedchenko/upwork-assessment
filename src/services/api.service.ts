@@ -12,15 +12,20 @@ export class ApiService {
         let eaht: Customer = new Customer("EAHT");
         this.customers.push(alex, inna, masha, dmitriy, eaht);
 
-        let apple: Product = new Product('apple', 1.0, 1.0);
-        let cherry: Product = new Product('cherry', 2.0, 1.0);
-        let peach: Product = new Product('peach', 1.0, 1.0);
-        let pears: Product = new Product('pears', 3.0, 1.0);
-        let grape: Product = new Product('grape', 5.0, 1.0);
+        let apple: Product = {name: 'apple', price: 1.0, quantity: 1.0};
+        let cherry: Product = {name: 'cherry', price: 2.0, quantity: 1.0};
+        let peach: Product = {name: 'peach', price: 1.0, quantity: 1.0};
+        let pears: Product = {name: 'pears', price: 3.0, quantity: 1.0};
+        let grape: Product = {name: 'grape', price: 5.0, quantity: 1.0};
         this.products.push(apple, cherry, peach, pears, grape);
 
         this.invoices.push(
-            new Invoice(this.products, this.customers[0], 0, 0));
+            {
+                products: this.products,
+                customer: this.customers[0],
+                discount: 0,
+                total: 0
+            });
     }
 
     getInvoices(): Array<Invoice> {
@@ -40,30 +45,17 @@ export class ApiService {
     }
 }
 
-export class Invoice {
+export interface Invoice {
     products: Array<Product>;
     customer: Customer;
     discount: number;
     total: number;
-
-    constructor(products: Array<Product>, customer: Customer, discount: number, total: number) {
-        this.customer = customer;
-        this.discount = discount;
-        this.total = total;
-        this.products = products;
-    }
 }
 
-export class Product {
+export interface Product {
     name: string;
     price: number;
     quantity: number;
-
-    constructor(name: string, price: number, quantity: number) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-    }
 }
 
 export class Customer {

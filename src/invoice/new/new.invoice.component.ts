@@ -30,13 +30,18 @@ export class NewInvoiceComponent implements OnInit {
         this.customers = this.apiService.getCustomers();
         this.allProducts = this.apiService.getProducts();
 
-        this.newInvoice = new Invoice(new Array<Product>(), this.customers[0], 0.0, 0.0);
+        this.newInvoice = {
+          products: [],
+          customer: this.customers[0],
+          discount: 0,
+          total: 0
+        };
 
         this.invoiceForm = this.formBuilder.group({
             customer: [this.newInvoice.customer],
             products: this.formBuilder.array([]),
-            total: [this.newInvoice.total],
-            discount: [this.newInvoice.discount]
+            discount: [this.newInvoice.discount],
+            total: [this.newInvoice.total]
         });
 
         this.productSearch = (text$: Observable<string>) =>
@@ -55,9 +60,9 @@ export class NewInvoiceComponent implements OnInit {
         let products = <FormArray>this.invoiceForm.controls['products'];
 
         let newProduct = this.formBuilder.group({
-            name: [{value: event.item.name, disabled: true}, Validators.required],
-            price: [{value: event.item.price, disabled: true}],
-            quantity: [{value: event.item.quantity, disabled: false}, Validators.required]
+            name: [event.item.name, Validators.required],
+            price: [event.item.price],
+            quantity: [event.item.quantity, Validators.required]
         });
 
         products.push(newProduct);
@@ -68,9 +73,14 @@ export class NewInvoiceComponent implements OnInit {
         products.removeAt(index);
     }
 
-    saveInvoice(): void {
-        this.apiService.createInvoice(this.invoiceForm.value);
-        this.newInvoice = new Invoice(new Array<Product>(), this.customers[0], 0.0, 0.0);
+    saveInvoice(invoice): void {
+        this.apiService.createInvoice(invoice);
+        this.newInvoice = {
+          products: [],
+          customer: this.customers[0],
+          discount: 0,
+          total: 0
+        };
         this.router.navigateByUrl('invoices');
     }
 
