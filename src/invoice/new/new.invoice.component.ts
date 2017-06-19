@@ -53,7 +53,8 @@ export class NewInvoiceComponent implements OnInit {
 
         this.productFormatter = (x: {name: string}) => x.name;
 
-        this.calculateTotalCost();
+        this.watchProductChanges();
+        this.watchDiscountChanges();
     }
 
     addProduct(event: NgbTypeaheadSelectItemEvent): void {
@@ -84,7 +85,26 @@ export class NewInvoiceComponent implements OnInit {
         this.router.navigateByUrl('invoices');
     }
 
-    calculateTotalCost(): void {
+    watchProductChanges(): void {
+        this.invoiceForm.controls['products'].valueChanges.subscribe(newValue => {
+            let totalCost = newValue
+                .map(product => product.price * product.quantity)
+                .reduce(function(accumulator, currentValue, currentIndex, array) {
+                    return accumulator + currentValue;
+                }, 0);
 
+            let discount: number = this.invoiceForm.controls['discount'].value/100;
+            let discountedCost: number = discount ? (totalCost - discount*totalCost) : totalCost;
+            this.invoiceForm.controls['total'].setValue(discountedCost.toFixed(2));
+        });
+    }
+
+    private watchDiscountChanges() {
+        this.invoiceForm.controls['discount'].valueChanges.subscribe(newValue => {
+            let discount: number = newValue/100;
+            let totalCost: number = Number.parseFloat(this.invoiceForm.controls['total'].value);
+            let discountedCost: number = discount ? (totalCost - discount*totalCost) : totalCost;
+            this.invoiceForm.controls['total'].setValue(discountedCost.toFixed(2));
+        });
     }
 }
