@@ -19,7 +19,11 @@ import {Router} from "@angular/router";
                 <tbody>
                     <tr *ngFor="let invoice of invoices">
                         <td>{{invoice.customer.name}}</td>
-                        <td><span *ngFor="let product of invoice.products">{{product.name}}<br></span></td>
+                        <td>
+                            <span *ngFor="let product of invoice.products; let i = index">
+                                <span>{{i > 0 ? ', '.concat(product.name) : ''.concat(product.name)}}</span>
+                            </span>
+                        </td>
                         <td>{{invoice.total}}</td>
                         <td>{{invoice.discount}}</td>
                     </tr>
