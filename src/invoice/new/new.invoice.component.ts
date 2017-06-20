@@ -82,7 +82,7 @@ export class NewInvoiceComponent implements OnInit {
     }
 
     saveInvoice(invoice): void {
-        this.apiService.createInvoice(invoice);
+        this.apiService.createInvoice(invoice.value);
         this.newInvoice = {
             products: [],
             customer: this.customers[0],

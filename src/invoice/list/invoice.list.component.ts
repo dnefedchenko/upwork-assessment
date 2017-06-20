@@ -24,8 +24,8 @@ import {Router} from "@angular/router";
                                 <span>{{i > 0 ? ', '.concat(product.name) : ''.concat(product.name)}}</span>
                             </span>
                         </td>
-                        <td>{{invoice.total}}</td>
                         <td>{{invoice.discount}}</td>
+                        <td>{{invoice.total}}</td>
                     </tr>
                 </tbody>
             </table>
