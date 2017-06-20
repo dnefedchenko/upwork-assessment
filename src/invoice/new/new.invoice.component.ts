@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, FormArray, Validators, FormControl} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ApiService, Customer, Invoice, Product} from "../../services/api.service";
 import {Observable} from "rxjs";
@@ -7,6 +7,12 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/distinctUntilChanged";
 import {NgbTypeaheadSelectItemEvent} from "@ng-bootstrap/ng-bootstrap";
+
+function positiveDigitValidator(control: FormControl): {[s: string]: boolean} {
+    if (!control.value.toString().match(/^\d+/)) {
+        return {nonDigit: true};
+    }
+}
 
 @Component({
     selector: 'invoice',
@@ -31,16 +37,17 @@ export class NewInvoiceComponent implements OnInit {
         this.allProducts = this.apiService.getProducts();
 
         this.newInvoice = {
-          products: [],
-          customer: this.customers[0],
-          discount: 0,
-          total: 0
+            products: [],
+            customer: this.customers[0],
+            discount: 0,
+            total: 0
         };
 
         this.invoiceForm = this.formBuilder.group({
             customer: [this.newInvoice.customer],
             products: this.formBuilder.array([]),
-            discount: [this.newInvoice.discount],
+            originalCost: '',
+            discount: [this.newInvoice.discount, Validators.compose([Validators.required, positiveDigitValidator])],
             total: [this.newInvoice.total]
         });
 
@@ -61,9 +68,9 @@ export class NewInvoiceComponent implements OnInit {
         let products = <FormArray>this.invoiceForm.controls['products'];
 
         let newProduct = this.formBuilder.group({
-            name: [event.item.name, Validators.required],
+            name: [event.item.name],
             price: [event.item.price],
-            quantity: [event.item.quantity, Validators.required]
+            quantity: [event.item.quantity, Validators.compose([Validators.required, positiveDigitValidator])]
         });
 
         products.push(newProduct);
@@ -77,10 +84,10 @@ export class NewInvoiceComponent implements OnInit {
     saveInvoice(invoice): void {
         this.apiService.createInvoice(invoice);
         this.newInvoice = {
-          products: [],
-          customer: this.customers[0],
-          discount: 0,
-          total: 0
+            products: [],
+            customer: this.customers[0],
+            discount: 0,
+            total: 0
         };
         this.router.navigateByUrl('invoices');
     }
@@ -89,21 +96,22 @@ export class NewInvoiceComponent implements OnInit {
         this.invoiceForm.controls['products'].valueChanges.subscribe(newValue => {
             let totalCost = newValue
                 .map(product => product.price * product.quantity)
-                .reduce(function(accumulator, currentValue, currentIndex, array) {
+                .reduce(function (accumulator, currentValue, currentIndex, array) {
                     return accumulator + currentValue;
                 }, 0);
 
-            let discount: number = this.invoiceForm.controls['discount'].value/100;
-            let discountedCost: number = discount ? (totalCost - discount*totalCost) : totalCost;
+            let discount: number = this.invoiceForm.controls['discount'].value / 100;
+            let discountedCost: number = discount ? (totalCost - discount * totalCost) : totalCost;
+            this.invoiceForm.controls['originalCost'].setValue(totalCost);
             this.invoiceForm.controls['total'].setValue(discountedCost.toFixed(2));
         });
     }
 
     private watchDiscountChanges() {
         this.invoiceForm.controls['discount'].valueChanges.subscribe(newValue => {
-            let discount: number = newValue/100;
-            let totalCost: number = Number.parseFloat(this.invoiceForm.controls['total'].value);
-            let discountedCost: number = discount ? (totalCost - discount*totalCost) : totalCost;
+            let discount: number = newValue / 100;
+            let originalCost: number = this.invoiceForm.controls['originalCost'].value;
+            let discountedCost: number = discount ? (originalCost - discount * originalCost) : originalCost;
             this.invoiceForm.controls['total'].setValue(discountedCost.toFixed(2));
         });
     }

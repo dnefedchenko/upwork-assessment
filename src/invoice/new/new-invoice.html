@@ -20,7 +20,7 @@
             </select>
 
             <label for="discount">&nbsp;&nbsp;Discount(%):&nbsp;&nbsp;</label>
-            <input id="discount" type="number" class="form-control" min="0" formControlName="discount">
+            <input id="discount" type="text" class="form-control qty-input" formControlName="discount">
 
             <label style="display: inline-block; float: right;"><strong>&nbsp;&nbsp;Total($):&nbsp;&nbsp;{{invoiceForm.controls['total'].value}}</strong></label>
         </div>
@@ -52,7 +52,7 @@
                         <span>{{invoiceForm.controls.products.controls[i].controls.price.value}}</span>
                     </td>
                     <td>
-                        <input type="number" class="form-control qty-input" min="0" formControlName="quantity">
+                        <input type="text" class="form-control qty-input" formControlName="quantity">
                     </td>
                 </tr>
                 </tbody>
